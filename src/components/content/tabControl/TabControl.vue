@@ -31,20 +31,7 @@ export default {
   methods: {
     itemClick(index) {
       this.currentIndex = index;
-      switch (index) {
-        case 0:
-          this.$emit('tabClick','pop')
-          break;
-        case 1:
-          this.$emit('tabClick','new')
-          break;
-        case 2:
-          this.$emit('tabClick','sell')
-          break;
-
-        default:
-          break;
-      }
+      this.$emit('tabClick',index)
     }
   }
 };
@@ -57,6 +44,7 @@ export default {
   font-size: 15px;
   height: 40px;
   line-height: 40px;
+  background-color: #fff;
 }
 .tab-control-item {
   flex: 1;
