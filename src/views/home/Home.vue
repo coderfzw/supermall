@@ -22,7 +22,7 @@
       <recommend-view :recommends="recommends" />
       <feature-view />
       <tab-control @tabClick="tabClick" :titles="['流行','新款','精选']" ref="tabControl2" />
-      <goods-list :goods="showGoods" />
+      <goods-list :goodsList="showGoods" />
     </scroll>
     <back-top @click.native="backClick" v-show="isShowBackTop" />
   </div>
@@ -37,11 +37,11 @@ import NavBar from "components/common/navbar/NavBar";
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
-import BackTop from "components/content/backTop/BackTop";
+
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 import { debounce } from "common/utils";
-import { log } from "util";
+import { showBackTop } from "common/mixin";
 export default {
   name: "Home",
   components: {
@@ -52,8 +52,8 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop
   },
+  mixins:[showBackTop],
   data() {
     return {
       banners: [],
@@ -64,7 +64,6 @@ export default {
         sell: { page: 0, list: [] }
       },
       goodsType: "pop",
-      isShowBackTop: false,
       tabOffsetTop: 0,
       istabFixed: false,
       scrollY: 0
@@ -87,15 +86,17 @@ export default {
   mounted() {
     const refresh = debounce(this.$refs.scroll.refresh, 50);
     //3.监听goodsItem中图片加载完成
-    this.$bus.$on("imgLoad", () => {
+    this.$bus.$on("homeImgLoad", () => {
       refresh();
     });
   },
   activated() {
+    this.$refs.scroll.refresh()
     this.$refs.scroll.scrollTo(0,this.scrollY,0)
     this.$refs.scroll.refresh()
   },
   deactivated() {
+    //记录离开时的位置
     this.scrollY = this.$refs.scroll.getScrollY()
   },
   methods: {
@@ -105,15 +106,15 @@ export default {
     getHomeMultidata() {
       //1.请求多个数据
       getHomeMultidata().then(res => {
-        this.banners = res.data.data.banner.list;
-        this.recommends = res.data.data.recommend.list;
+        this.banners = res.data.banner.list;
+        this.recommends = res.data.recommend.list;
       });
     },
     //2.请求商品数据
     getHomeGoods(type) {
       const page = this.goods[type].page + 1;
       getHomeGoods(type, page).then(res => {
-        this.goods[type].list.push(...res.data.data.list);
+        this.goods[type].list.push(...res.data.list);
         this.goods[type].page = page;
       });
     },
@@ -135,13 +136,12 @@ export default {
       this.$refs.tabControl1.currentIndex = index
       this.$refs.tabControl2.currentIndex = index
     },
-    backClick() {
-      this.$refs.scroll.scrollTo(0, 0, 500);
-    },
     contentScroll(position) {
+      //判断是否显示返回顶部
       this.isShowBackTop = -position.y > 1000;
       this.istabFixed = -position.y > this.tabOffsetTop;
     },
+    //上拉加载更多
     pullingUpClick() {
       this.getHomeGoods(this.goodsType);
       this.$refs.scroll.finishPullUp();
