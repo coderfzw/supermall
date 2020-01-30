@@ -87,6 +87,7 @@ export default {
   border-radius: 5px;
 }
 .cart-right {
+  width: 70%;
   position: relative;
   padding: 5px 10px;
   font-size: 17px;

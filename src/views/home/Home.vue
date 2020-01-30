@@ -148,7 +148,7 @@ export default {
     },
     imageLoad() {
       //获取tabControl的offsetTop
-      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;   
     }
   }
 };
