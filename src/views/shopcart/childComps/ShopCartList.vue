@@ -130,9 +130,11 @@ export default {
   border-right: 1px solid #ccc;
 }
 .left-count {
+  touch-action: none;
   width: 20px;
 }
 .right-count {
+  touch-action: none;
   width: 20px;
 }
 </style>

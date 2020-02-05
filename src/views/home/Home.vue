@@ -17,11 +17,20 @@
       :probe-type="3"
       @scroll="contentScroll"
       @pullingUp="pullingUpClick"
+      @pullingDown="pullingDownClick"
     >
+      <div class="refresh" v-show="isShowRf">
+        <span class="glyphicon glyphicon-refresh">刷新成功</span>
+      </div>
       <home-swiper :banners="banners" @imageLoad="imageLoad" />
       <recommend-view :recommends="recommends" />
       <feature-view />
-      <tab-control @tabClick="tabClick" :titles="['流行','新款','精选']" ref="tabControl2" />
+      <tab-control
+        @tabClick="tabClick"
+        :titles="['流行','新款','精选']"
+        ref="tabControl2"
+        v-show="!istabFixed"
+      />
       <goods-list :goodsList="showGoods" />
     </scroll>
     <back-top @click.native="backClick" v-show="isShowBackTop" />
@@ -38,7 +47,6 @@ import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
 
-
 import { getHomeMultidata, getHomeGoods } from "network/home";
 import { debounce } from "common/utils";
 import { showBackTop } from "common/mixin";
@@ -51,9 +59,9 @@ export default {
     NavBar,
     TabControl,
     GoodsList,
-    Scroll,
+    Scroll
   },
-  mixins:[showBackTop],
+  mixins: [showBackTop],
   data() {
     return {
       banners: [],
@@ -66,7 +74,8 @@ export default {
       goodsType: "pop",
       tabOffsetTop: 0,
       istabFixed: false,
-      scrollY: 0
+      scrollY: 0,
+      isShowRf: false
     };
   },
   computed: {
@@ -91,13 +100,13 @@ export default {
     });
   },
   activated() {
-    this.$refs.scroll.refresh()
-    this.$refs.scroll.scrollTo(0,this.scrollY,0)
-    this.$refs.scroll.refresh()
+    this.$refs.scroll.refresh();
+    this.$refs.scroll.scrollTo(0, this.scrollY, 0);
+    this.$refs.scroll.refresh();
   },
   deactivated() {
     //记录离开时的位置
-    this.scrollY = this.$refs.scroll.getScrollY()
+    this.scrollY = this.$refs.scroll.getScrollY();
   },
   methods: {
     /*
@@ -133,22 +142,40 @@ export default {
           this.goodsType = "sell";
           break;
       }
-      this.$refs.tabControl1.currentIndex = index
-      this.$refs.tabControl2.currentIndex = index
+      this.$refs.tabControl1.currentIndex = index;
+      this.$refs.tabControl2.currentIndex = index;
     },
     contentScroll(position) {
       //判断是否显示返回顶部
       this.isShowBackTop = -position.y > 1000;
-      this.istabFixed = -position.y > this.tabOffsetTop;
+      this.istabFixed = -position.y >= this.tabOffsetTop;
+      if (position.y >= 44) {
+        this.isShowRf = true;
+        setTimeout(() => {
+          this.isShowRf = false;
+        }, 1500);
+      }
     },
     //上拉加载更多
     pullingUpClick() {
       this.getHomeGoods(this.goodsType);
       this.$refs.scroll.finishPullUp();
     },
+    //下拉刷新
+    pullingDownClick() {
+      //1.请求多个数据
+      this.getHomeMultidata();
+
+      //2.请求商品数据
+      this.getHomeGoods("pop");
+      this.getHomeGoods("new");
+      this.getHomeGoods("sell");
+      this.$refs.scroll.finishPullDown();
+      console.log("刷新完成");
+    },
     imageLoad() {
       //获取tabControl的offsetTop
-      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;   
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop - 44;
     }
   }
 };
@@ -174,12 +201,16 @@ export default {
   z-index: 9;
 }
 .content-scroll {
-  position: absolute;
+  /* position: absolute;
   top: 44px;
   bottom: 49px;
   left: 0;
-  right: 0;
-  /* height: calc(100% - 49px); */
+  right: 0; */
+  height: calc(100% - 49px);
   overflow: hidden;
+}
+.refresh {
+  text-align: center;
+  line-height: 44px;
 }
 </style>

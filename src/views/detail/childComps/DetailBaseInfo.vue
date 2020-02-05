@@ -86,8 +86,11 @@ export default {
   line-height: 60px;
   font-size: 13px;
   color: #333;
-  vertical-align: middle;
   flex-wrap: wrap;
+}
+.info-service-item {
+  display: flex;
+  align-items: center;
 }
 .info-service-item img {
   width: 14px;

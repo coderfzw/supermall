@@ -51,6 +51,8 @@ export default {
     calcClick() {
       if(this.listCheckedLength == 0) {
         this.$toast.show('请勾选要购买的商品')
+      }else {
+        this.$toast.show('抱歉,该功能正在开发中')
       }
     }
   }

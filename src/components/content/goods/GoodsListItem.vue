@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="itemClick">
-    <img :src="getImg" alt="" @load="imgClick">
+    <img v-lazy="getImg" alt="" @load="imgClick">
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">￥{{goodsItem.price}}</span>
@@ -44,7 +44,7 @@ export default {
 
 <style>
   .goods-item {
-    width: 48%;
+    width: 48%!important;
     position: relative;
     padding-bottom: 40px;
   }
@@ -56,7 +56,7 @@ export default {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 5px;
+    bottom: -3px;
     font-size: 12px;
     text-align: center;
     overflow: hidden;
@@ -65,6 +65,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-bottom: 3px;
   }
   .goods-info span {
     margin: 0 10px;

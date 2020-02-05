@@ -36,6 +36,7 @@
   }
 
   .item {
+    width: 30%!important;
     text-align: center;
     font-size: 12px;
   }

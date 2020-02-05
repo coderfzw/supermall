@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'Toast',
+  name: "Toast",
   // props: {
   //   message:{
   //     type: String,
@@ -13,31 +13,31 @@ export default {
   // }
   data() {
     return {
-      message: '',
+      message: "",
       isShow: false
-    }
+    };
   },
   methods: {
-    show(message,showTime=1500) {
-      this.isShow = true
-      this.message = message
+    show(message, showTime = 1500) {
+      this.isShow = true;
+      this.message = message;
       setTimeout(() => {
-        this.isShow = false
-        this.message = ''
+        this.isShow = false;
+        this.message = "";
       }, showTime);
     }
   }
-}
+};
 </script>
 
 <style>
-  .shop-success {
+.shop-success {
   position: fixed;
   left: 50%;
   top: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   font-size: 12px;
-  background-color: rgba(0,0,0,.7);
+  background-color: rgba(0, 0, 0, 0.7);
   padding: 13px 14px;
   color: #fff;
   border-radius: 5px;

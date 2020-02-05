@@ -1,5 +1,5 @@
 <template>
-  <div id="tab-bar">
+  <div class="tab-bar">
     <slot></slot>
   </div>
 </template>
@@ -12,7 +12,7 @@ export default {
 
 <style>
 
-#tab-bar {
+.tab-bar {
   position: fixed;
   left: 0;
   right: 0;
