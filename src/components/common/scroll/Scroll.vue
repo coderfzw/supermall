@@ -63,6 +63,8 @@ export default {
       });
     },
     refresh() {
+      console.log(111);
+      
       this.scroll && this.scroll.refresh && this.scroll.refresh();
     },
     finishPullUp() {

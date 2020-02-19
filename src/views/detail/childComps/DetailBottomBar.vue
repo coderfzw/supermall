@@ -16,7 +16,7 @@
     </div>
     <div class="bottom-right">
       <div class="shop-cart" @click="addCart">加入购物车</div>
-      <div class="shop-buy">购买</div>
+      <div class="shop-buy" @click="buyClick">购买</div>
     </div>
   </div>
 </template>
@@ -27,6 +27,9 @@ export default {
   methods: {
     addCart() {
       this.$emit('addCart')
+    },
+    buyClick() {
+      this.$emit('buyClick')
     }
   }
 }

@@ -19,18 +19,17 @@
       @pullingUp="pullingUpClick"
       @pullingDown="pullingDownClick"
     >
-    <van-pull-refresh v-model="isLoading" success-text="刷新成功" @refresh="onRefresh">
+      <van-pull-refresh v-model="isLoading" success-text="刷新成功" @refresh="onRefresh">
         <home-swiper :banners="banners" @imageLoad="imageLoad" />
         <recommend-view :recommends="recommends" />
         <feature-view />
-      <tab-control
-        @tabClick="tabClick"
-        :titles="['流行','新款','精选']"
-        ref="tabControl2"
-        v-show="!istabFixed"
-      />
+        <tab-control
+          @tabClick="tabClick"
+          :titles="['流行','新款','精选']"
+          ref="tabControl2"
+        />
+        <goods-list :goodsList="showGoods" />
       </van-pull-refresh>
-      <goods-list :goodsList="showGoods" />
     </scroll>
     <back-top @click.native="backClick" v-show="isShowBackTop" />
   </div>
@@ -80,7 +79,6 @@ export default {
       tabOffsetTop: 0,
       istabFixed: false,
       scrollY: 0,
-      isShowRf: false,
       count: 0,
       isLoading: false
     };
@@ -100,7 +98,7 @@ export default {
     this.getHomeGoods("sell");
   },
   mounted() {
-    const refresh = debounce(this.$refs.scroll.refresh, 20);
+    const refresh = debounce(this.$refs.scroll.refresh, 50);
     //3.监听goodsItem中图片加载完成
     this.$bus.$on("homeImgLoad", () => {
       refresh();
@@ -156,6 +154,8 @@ export default {
       //判断是否显示返回顶部
       this.isShowBackTop = -position.y > 1000;
       this.istabFixed = -position.y > this.tabOffsetTop;
+      console.log(-position.y);
+      
     },
     //上拉加载更多
     pullingUpClick() {
@@ -213,7 +213,6 @@ export default {
   bottom: 49px;
   left: 0;
   right: 0; */
-  position: relative;
   height: calc(100% - 49px);
   overflow: hidden;
 }

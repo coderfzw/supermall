@@ -56,7 +56,7 @@ export default {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -3px;
+    bottom: 5px;
     font-size: 12px;
     text-align: center;
     overflow: hidden;

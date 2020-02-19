@@ -11,7 +11,7 @@
       <detail-recommend-info ref="recommend" :recommends="recommends" />
     </scroll>
     <back-top @click.native="backClick" v-show="isShowBackTop" />
-    <detail-bottom-bar @addCart="addCart" />
+    <detail-bottom-bar @addCart="addCart" @buyClick="buyClick" />
   </div>
 </template>
 
@@ -72,7 +72,7 @@ export default {
   created() {
     //1.保存传入的iid
     this.iid = this.$route.params.iid;
-
+    
     //2.根据iid请求详情数据
     getDetail(this.iid).then(res => {
       const data = res.result;
@@ -163,6 +163,20 @@ export default {
       this.$store.dispatch("addCart", product).then(res => {
         //显示toast
         this.$toast.show(res);
+      });
+    },
+    buyClick() {
+      //添加购物车需要展示的数据
+      const product = {};
+      product.iid = this.iid;
+      //将商品添加到购物车
+      // this.$store.commit('addCart',product)
+      this.$store.dispatch("gobuy", product).then(res => {
+        if (res) {
+          this.$toast.show(res);
+        } else {
+          this.$router.push("/shopcart");
+        }
       });
     }
   }

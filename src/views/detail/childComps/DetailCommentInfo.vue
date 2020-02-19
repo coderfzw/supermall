@@ -1,7 +1,7 @@
 <template>
   <div class="comment-info" v-if="Object.keys(commentInfo).length !== 0">
     <div class="comment-title">
-      <span class="left">用户评价</span>
+      <span>用户评价</span>
       <span class="right">更多 ></span>
     </div>
     <div class="comment-user">

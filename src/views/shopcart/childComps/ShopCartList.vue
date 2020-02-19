@@ -114,6 +114,7 @@ export default {
 }
 .cart-count {
   position: absolute;
+  overflow: hidden;
   right: 30px;
   bottom: 4px;
   height: 20px;
